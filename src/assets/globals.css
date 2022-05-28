@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    text-rendering: optimizeLegibility;
+    shape-rendering: crispEdges;
+    background-color: #000407;
+    color: white;
+    height: 100vh;
+}
+
+.wv-center {
+    position: relative;
+    top: 21vh;
+}
