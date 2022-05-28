@@ -13,7 +13,8 @@ import {createStore} from "vuex";
 const store = createStore({
     state(){
         return {
-            skip_welcome: localStorage.getItem("skip_welcome") === "__yes__"
+            skip_welcome: localStorage.getItem("skip_welcome") === "__yes__",
+            note_list: []
         }
     }
 })
