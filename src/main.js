@@ -18,7 +18,8 @@ const store = createStore({
             note_list: [],
             show_new_note_name_field: false,
             new_note_name_value: "",
-            selected_note_id: ""
+            selected_note_id: "",
+            delete_note_id: ""
         }
     }
 })
