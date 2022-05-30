@@ -6,21 +6,21 @@
     </div>
 
     <div class="absolute h-3/5 w-1/4 left-0 px-4 mt-5">
-      <div v-for="note in store.state.note_list" key="id">
-        <div v-if="store.state.selected_note_id === note.id" class="transition duration-200 p-2 bg-blue-600 text-white border border-transparent rounded-lg my-2">
+      <div v-for="note_id in store.state.note_list" key="note_id">
+        <div v-if="store.state.selected_note_id === note_id" class="transition duration-200 p-2 bg-blue-600 text-white border border-transparent rounded-lg my-2">
           <div class="flex justify-between w-full">
-            <button v-on:click="selectNote(note.id)" class="text-left text-white truncate w-2/3 text-gray-600 hover:text-gray-200 transition duration-100 py-1">{{note.id}}</button>
+            <button v-on:click="selectNote(note_id)" class="text-left text-white truncate w-2/3 hover:text-gray-200 transition duration-100 py-1">{{note_id}}</button>
             <div>
               <button class="inline-block text-white p-1 mx-1 hover:text-gray-400 transition duration-100"><i class="bi bi-pencil-square"></i></button>
-              <button v-on:click="ask2DeleteNote(note.id)" class="inline-block text-white p-1 hover:text-red-500 transition duration-100"><i class="bi bi-trash3"></i></button>
+              <button v-on:click="ask2DeleteNote(note_id)" class="inline-block text-white p-1 hover:text-red-500 transition duration-100"><i class="bi bi-trash3"></i></button>
             </div>
           </div>
-          <div v-if="store.state.delete_note_id === note.id">
+          <div v-if="store.state.delete_note_id === note_id">
             <hr class="my-1 py-1 border-gray-200">
             <div class="flex justify-between w-full">
               <strong class="py-1 text-xs font-bold">Are you sure?</strong>
               <div>
-                <button v-on:click="deleteNote(note.id)" class="text-blue-200 hover:text-red-200 rounded-lg hover:underline py-1 px-2 text-xs mx-1">Delete</button>
+                <button v-on:click="deleteNote(note_id)" class="text-blue-200 hover:text-red-200 rounded-lg hover:underline py-1 px-2 text-xs mx-1">Delete</button>
                 <button v-on:click="cancelNoteDeletion" class="bg-white hover:bg-blue-200 text-blue-600 rounded-lg py-1 px-2 text-xs">Cancel</button>
               </div>
             </div>
@@ -28,18 +28,18 @@
         </div>
         <div v-else class="transition duration-200 p-2 border border-gray-900 rounded-lg my-2">
           <div class="flex justify-between w-full">
-            <button v-on:click="selectNote(note.id)" class="text-left truncate w-2/3 text-gray-600 hover:text-gray-200 transition duration-100 py-1">{{note.id}}</button>
+            <button v-on:click="selectNote(note_id)" class="text-left truncate w-2/3 text-gray-600 hover:text-gray-200 transition duration-100 py-1">{{note_id}}</button>
             <div>
               <button class="inline-block text-gray-600 p-1 mx-1 hover:text-blue-600 transition duration-100"><i class="bi bi-pencil-square"></i></button>
-              <button v-on:click="ask2DeleteNote(note.id)" class="inline-block text-gray-600 p-1 hover:text-red-600 transition duration-100"><i class="bi bi-trash3"></i></button>
+              <button v-on:click="ask2DeleteNote(note_id)" class="inline-block text-gray-600 p-1 hover:text-red-600 transition duration-100"><i class="bi bi-trash3"></i></button>
             </div>
           </div>
-          <div v-if="store.state.delete_note_id === note.id">
+          <div v-if="store.state.delete_note_id === note_id">
             <hr class="my-1 py-1 border-gray-600">
             <div class="flex justify-between w-full">
               <strong class="py-1 text-xs font-bold">Are you sure?</strong>
               <div>
-                <button v-on:click="deleteNote(note.id)" class="text-red-600 rounded-lg hover:underline py-1 px-2 text-xs mx-1">Delete</button>
+                <button v-on:click="deleteNote(note_id)" class="text-red-600 rounded-lg hover:underline py-1 px-2 text-xs mx-1">Delete</button>
                 <button v-on:click="cancelNoteDeletion" class="bg-blue-600 rounded-lg py-1 px-2 text-xs">Cancel</button>
               </div>
             </div>
@@ -49,6 +49,7 @@
     </div>
 
     <div class="absolute w-1/4 left-0 bottom-0 mb-4 px-4">
+      <strong v-if="store.state.show_new_note_name_field && store.state.show_conflict_new_note_name_error" class="text-red-500">Name has been conflict!</strong>
       <div v-if="store.state.show_new_note_name_field" class="flex justify-between w-full my-3 border border-gray-900 rounded-lg">
         <input v-on:keyup.enter="createNewNote" v-model="store.state.new_note_name_value" class="w-full py-2 px-4 rounded-l-lg bg-transparent outline-none" type="text" placeholder="Name">
         <button v-on:click="cancelNewNoteField" class="bg-red-500 hover:bg-red-600 active:bg-red-700 px-2 py-1 rounded-lg"><i class="bi bi-x text-xl"></i></button>
@@ -80,23 +81,40 @@
       PouchDB("winote").put({
         _id: String(store.state.new_note_name_value),
         note: String("# " + store.state.new_note_name_value)
-      }).then((r) => store.state.note_list.push(r))
-      console.log("New Note Created:", store.state.new_note_name_value);
-      cancelNewNoteField();
+      }).catch((err) => {
+        console.log("Error:", err);
+      }).then((r) => {
+        if(r){
+          store.state.note_list.push(r.id)
+          console.log("New Note Created:", store.state.new_note_name_value);
+          cancelNewNoteField();
+        } else {
+          store.state.show_conflict_new_note_name_error = true;
+          console.log("Conflict!");
+        }
+      })
     } else {
       alert("Plz enter a valid note name!")
     }
   }
 
   const selectNote = (selected_id) => {
-    store.state.selected_note_id = selected_id;
-    console.log("Note Selected:", selected_id);
+    if(store.state.selected_note_id !== selected_id){ // Don't select the already selected note
+      store.state.selected_note_id = selected_id;
+      console.log("Note Selected:", selected_id);
+    }
   }
 
   const deleteNote = (target_id) => {
     PouchDB("winote").get(target_id).then((r) => {
-      PouchDB("winote").remove(r)
-      store.state.note_list.pop(r)
+      PouchDB("winote").remove(r);  // Remove from Database.
+      store.state.note_list = []; // Dump the store;
+      PouchDB("winote").allDocs().then((r) => {
+        for(let i = 0; i <= r.total_rows - 1; i++){
+          store.state.note_list.push(r.rows[i].id);
+          console.log("Push Note to Store:", r.rows[i].id);
+        }
+      }); // Refresh
       console.log("Document Removed:", target_id);
     })
   }

@@ -18,7 +18,13 @@ import PouchDB from "pouchdb";
 
 
 // Set note list
-PouchDB("winote").allDocs().then((r) => store.state.note_list = r.rows)
+//PouchDB("winote").allDocs().then((r) => store.state.note_list = r.rows)
+PouchDB("winote").allDocs().then((r) => {
+  for(let i = 0; i <= r.total_rows - 1; i++){
+    store.state.note_list.push(r.rows[i].id);
+    console.log("Push Note to Store:", r.rows[i].id);
+  }
+})
 
 import Welcome from "./components/Welcome.vue";
 import Menu from "./components/Menu.vue";
