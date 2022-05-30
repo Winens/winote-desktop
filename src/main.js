@@ -17,6 +17,7 @@ const store = createStore({
             skip_welcome: localStorage.getItem("skip_welcome") === "__yes__",
             note_list: [],
             show_new_note_name_field: false,
+            show_conflict_new_note_name_error: false,
             new_note_name_value: "",
             selected_note_id: "",
             delete_note_id: ""
