@@ -4,8 +4,8 @@
     <div class="w-1/4 float-left h-screen">
       <Menu/>
     </div>
-    <div>
-
+    <div v-if="store.state.selected_note_id">
+      <Editor/>
     </div>
   </div>
 </template>
@@ -28,6 +28,7 @@ PouchDB("winote").allDocs().then((r) => {
 
 import Welcome from "./components/Welcome.vue";
 import Menu from "./components/Menu.vue";
+import Editor from "./components/Editor.vue";
 
 
 </script>
