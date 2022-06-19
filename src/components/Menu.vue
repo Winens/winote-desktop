@@ -64,6 +64,7 @@
   import PouchDB from "pouchdb";
   import {useStore} from "vuex";
   const store = useStore();
+  const db = PouchDB("winote");
 
   const showNewNoteField = () => {
     store.state.show_new_note_name_field = true;
@@ -78,7 +79,7 @@
 
   const createNewNote = () => {
     if(store.state.new_note_name_value && store.state.new_note_name_value.length >= 1 && store.state.new_note_name_value.length <= 36){
-      PouchDB("winote").put({
+      db.put({
         _id: String(store.state.new_note_name_value),
         note: String("# " + store.state.new_note_name_value)
       }).catch((err) => {
@@ -101,15 +102,18 @@
   const selectNote = (selected_id) => {
     if(store.state.selected_note_id !== selected_id){ // Don't select the already selected note
       store.state.selected_note_id = selected_id;
+      db.get(selected_id).then((r) => {
+        store.state.editor_model = r.note;
+      })
       console.log("Note Selected:", selected_id);
     }
   }
 
   const deleteNote = (target_id) => {
-    PouchDB("winote").get(target_id).then((r) => {
-      PouchDB("winote").remove(r);  // Remove from Database.
+    db.get(target_id).then((r) => {
+      db.remove(r);  // Remove from Database.
       store.state.note_list = []; // Dump the store;
-      PouchDB("winote").allDocs().then((r) => {
+      db.allDocs().then((r) => {
         for(let i = 0; i <= r.total_rows - 1; i++){
           store.state.note_list.push(r.rows[i].id);
           console.log("Push Note to Store:", r.rows[i].id);
