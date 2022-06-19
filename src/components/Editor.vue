@@ -1,14 +1,14 @@
 <template>
   <Codemirror placeholder="# Editor"
     :extensions="exts"
-    :style="{height: 'calc(100vh - 24px)'}"
+    :style="{height: 'calc(100vh - 24px)', fontSize: '128%'}"
     :autofocus=true
     v-model="store.state.editor_model"
   />
 </template>
 
 <script setup>
-import "codemirror/lib/codemirror.css";
+//import "codemirror/lib/codemirror.css";
 import {Codemirror} from 'vue-codemirror';
 import {oneDark} from "@codemirror/theme-one-dark";
 import {markdown} from "@codemirror/lang-markdown";
