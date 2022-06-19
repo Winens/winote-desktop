@@ -26,9 +26,9 @@
             </div>
           </div>
         </div>
-        <div v-else class="transition duration-200 p-2 border border-gray-900 rounded-lg my-2">
+        <div v-else class="transition duration-200 p-2 rounded-lg my-2">
           <div class="flex justify-between w-full">
-            <button v-on:click="selectNote(note_id)" class="text-left truncate w-2/3 text-gray-600 hover:text-gray-200 transition duration-100 py-1">{{note_id}}</button>
+            <button v-on:click="selectNote(note_id)" class="text-left truncate w-2/3 text-zinc-500 hover:text-white transition duration-100 py-1">{{note_id}}</button>
             <div>
               <button class="inline-block text-gray-600 p-1 mx-1 hover:text-blue-600 transition duration-100"><i class="bi bi-pencil-square"></i></button>
               <button v-on:click="ask2DeleteNote(note_id)" class="inline-block text-gray-600 p-1 hover:text-red-600 transition duration-100"><i class="bi bi-trash3"></i></button>
@@ -50,9 +50,9 @@
 
     <div class="absolute w-1/4 left-0 bottom-0 mb-4 px-4">
       <strong v-if="store.state.show_new_note_name_field && store.state.show_conflict_new_note_name_error" class="text-red-500">Name has been conflict!</strong>
-      <div v-if="store.state.show_new_note_name_field" class="flex justify-between w-full my-3 border border-gray-900 rounded-lg">
+      <div v-if="store.state.show_new_note_name_field" class="flex justify-between w-full my-3 border border-zinc-700 rounded-lg">
         <input v-on:keyup.enter="createNewNote" v-model="store.state.new_note_name_value" class="w-full py-2 px-4 rounded-l-lg bg-transparent outline-none" type="text" placeholder="Name">
-        <button v-on:click="cancelNewNoteField" class="bg-red-500 hover:bg-red-600 active:bg-red-700 px-2 py-1 rounded-lg"><i class="bi bi-x text-xl"></i></button>
+        <button v-on:click="cancelNewNoteField" class="bg-red-500 hover:bg-red-600 active:bg-red-700 px-2 py-1 rounded-r-lg"><i class="bi bi-x text-xl"></i></button>
       </div>
       <button v-on:click="showNewNoteField" class="py-2 px-4 bg-green-700 hover:bg-green-800 active:bg-green-900 w-full rounded-lg"><i class="bi bi-plus-lg mr-2"></i>New Note</button>
     </div>

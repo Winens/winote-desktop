@@ -5,7 +5,9 @@
       <Menu/>
     </div>
     <div v-if="store.state.selected_note_id">
-      <Editor/>
+      <MenuBar/>
+      <Editor v-if="!store.state.preview_mode"/>
+      <Preview v-else/>
     </div>
   </div>
 </template>
@@ -28,7 +30,9 @@ PouchDB("winote").allDocs().then((r) => {
 
 import Welcome from "./components/Welcome.vue";
 import Menu from "./components/Menu.vue";
+import MenuBar from "./components/MenuBar.vue";
 import Editor from "./components/Editor.vue";
+import Preview from "./components/Preview.vue";
 
 
 </script>

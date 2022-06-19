@@ -1,7 +1,7 @@
 <template>
   <Codemirror placeholder="# Editor"
     :extensions="exts"
-    :style="{height: '100vh'}"
+    :style="{height: 'calc(100vh - 24px)'}"
     :autofocus=true
     v-model="store.state.editor_model"
   />
@@ -12,6 +12,7 @@ import "codemirror/lib/codemirror.css";
 import {Codemirror} from 'vue-codemirror';
 import {oneDark} from "@codemirror/theme-one-dark";
 import {markdown} from "@codemirror/lang-markdown";
+//import {languages} from "@codemirror/language-data";
 import {useStore} from "vuex";
 import PouchDB from "pouchdb";
 const store = useStore();
@@ -31,7 +32,6 @@ const save_current_note = () => {
     console.log(p.ok);
   })
 }
-
 
 const event_listener = (e) => {
   if (e.key === "s" && (e.ctrlKey || e.metaKey)) {

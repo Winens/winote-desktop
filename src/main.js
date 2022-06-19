@@ -21,7 +21,9 @@ const store = createStore({
             new_note_name_value: "",
             selected_note_id: "",
             delete_note_id: "",
-            editor_model: ""
+            editor_model: "",
+            preview_mode: false,
+            show_export_options: false
         }
     }
 })
