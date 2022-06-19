@@ -20,7 +20,8 @@ const store = createStore({
             show_conflict_new_note_name_error: false,
             new_note_name_value: "",
             selected_note_id: "",
-            delete_note_id: ""
+            delete_note_id: "",
+            editor_model: ""
         }
     }
 })
